@@ -1,0 +1,54 @@
+#include<bits/stdc++.h> 
+using namespace std; 
+  
+struct Node 
+{ 
+    int data; 
+    struct Node* left, *right; 
+}; 
+  
+struct Node* newNode(int data) 
+{ 
+    struct Node* newNode = new Node; 
+    newNode->data = data; 
+    newNode->left = newNode->right = NULL; 
+    return (newNode); 
+} 
+  
+void fun(Node* node,int &c,int csum,int k,int sum,queue<int> q) 
+{
+    //c is count,csum is current sum,k required level,sum is required sum
+    if(node==NULL) return;
+    else if(q.size()==k)
+    {
+        int temp=q.front();
+        q.pop();
+        fun(node,c,csum-temp,k,sum,q);
+    }
+    else
+    {
+        q.push(node->data);
+        csum+=node->data;
+        if(q.size()==k && csum==sum ) c++;
+        fun(node->left,c,csum,k,sum,q);
+        fun(node->right,c,csum,k,sum,q);
+    }
+}
+
+  
+int main(void) 
+{ 
+    struct Node *root = newNode(2); 
+    root->left        = newNode(1); 
+    root->right       = newNode(1);
+    root->left->left  = newNode(1); 
+    root->left->right = newNode(1); 
+    root->right->right = newNode(1); 
+    root->right->left = newNode(1); 
+    root->left->left->left  = newNode(1);
+    int c=0;
+    queue<int> q;
+    fun(root,c,0,2,2,q);
+    cout << "Ans is " <<c; 
+    return 0; 
+} 
